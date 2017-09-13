@@ -5,7 +5,7 @@ title:直接加入标题测试
 ## Welcome Www666
 
 You can use the [editor on GitHub](https://github.com/wpcolor/wpcolor.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
+好慢
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
