@@ -23,9 +23,9 @@ _posts/              文件夹将包含所有的日志文件，Markdown格式
 ，修改其中内容，比如去掉到项目主页的连接按钮，然后提交。
 
 ## 修改页面标题
-\---
-titile: my blog
-\---
+>\---
+>titile: my blog
+>\---
 也不用指定： layout:default  
 
 ## md文件转换为html
@@ -52,10 +52,10 @@ git pull 获取远程关联库合并到本地更新
 
 
 # 例子：博客内容页 xx.html or xx.md
----
-layout: default
-title: 你好，世界
----
+>---
+>layout: default
+>title: 你好，世界
+>---
 <h2>\{\{ page.title \}\}</h2>
 <p>我的第一篇文章</p>
 <p>\{\{ page.date | date_to_string \}\}</p>
@@ -86,13 +86,13 @@ title: 我的Blog
 　　<h2>\{\{ page.title \}\}</h2>
 　　<p>最新文章</p>
 　　<ul>
-　　　　\{% for post in site.posts %\}
+　　　　\{\% for post in site.posts \%\}
 　　　　　　<li>\{\{ post.date | date_to_string \}\} <a href="\{\{ site.baseurl \}\}\{\{ post.url \}\}">\{\{ post.title \}\}</a></li>
-　　　　\{% endfor %\}
+　　　　\{\% endfor \%\}
 　　</ul>
 ```
 
-- \{% for post in site.posts %\}，表示对所有帖子进行一个遍历。这里要注意的是，Liquid模板语言规定，输出内容使用两层大括号，单纯的命令使用一层大括号。
+- \{\% for post in site.posts \%\}，表示对所有帖子进行一个遍历。这里要注意的是，Liquid模板语言规定，输出内容使用两层大括号，单纯的命令使用一层大括号。
 
 - \{\{site.baseurl\}\}就是_config.yml中设置的baseurl变量。
 
@@ -101,8 +101,8 @@ title: 我的Blog
 ```
 <h4>分类列表</h4>  
     <hr>  
-    \{% for category in site.categories %\}  
+    \{\% for category in site.categories \%\}  
     <li class="category_list_item"><a href="/showCategory.html?categoryName=\{\{ category | first \}\}">\{\{ category | first \}\}</a> (\{\{ category | last | size \}\})  
     </li>  
-    \{% endfor %\}  
+    \{\% endfor \%\}  
 ```
