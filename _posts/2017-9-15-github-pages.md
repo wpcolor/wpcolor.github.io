@@ -1,5 +1,5 @@
 ---
-titile: Github pages 设置
+title: Github pages 设置
 ---
 Github pages 
 # 目录结构
