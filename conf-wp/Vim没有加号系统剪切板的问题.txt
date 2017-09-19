@@ -1,0 +1,58 @@
+Vim没有加号系统剪切板的问题
+
+事后分析：
+gvim支持系统剪切板 + 
+rhel7自带的vim不支持（在xshell中运行，只能通过鼠标粘贴）
+
+原因：
+无图形界面的vi或vim下可用的寄存器只包括{a-zA-Z0-9.%#:-"}，这里面没有"*或者"+等选择及拖拽存器。
+
+实现vim与外部应用相互复制、粘贴的关键在于系统剪切板对于vim是否可用。查看vim剪切板是否可用的命令为vim --version  命令截图如下：
+
+=======================================
+[root@localhost soft]# vim --version
+VIM - Vi IMproved 7.4 (2013 Aug 10, compiled Jan 30 2014 10:56:39)
+包含补丁: 1-160
+修改者 <bugzilla@redhat.com>
+编译者 <bugzilla@redhat.com>
+巨型版本 无图形界面。  可使用(+)与不可使用(-)的功能:
++acl             +farsi           +mouse_netterm   +syntax
++arabic          +file_in_path    +mouse_sgr       +tag_binary
++autocmd         +find_in_path    -mouse_sysmouse  +tag_old_static
+-balloon_eval    +float           +mouse_urxvt     -tag_any_white
+-browse          +folding         +mouse_xterm     -tcl
+++builtin_terms  -footer          +multi_byte      +terminfo
++byte_offset     +fork()          +multi_lang      +termresponse
++cindent         +gettext         -mzscheme        +textobjects
+-clientserver    -hangul_input    +netbeans_intg   +title
+-clipboard       +iconv           +path_extra      -toolbar
++cmdline_compl   +insert_expand   +perl            +user_commands
++cmdline_hist    +jumplist        +persistent_undo +vertsplit
++cmdline_info    +keymap          +postscript      +virtualedit
++comments        +langmap         +printer         +visual
++conceal         +libcall         +profile         +visualextra
++cryptv          +linebreak       +python/dyn      +viminfo
++cscope          +lispindent      -python3         +vreplace
++cursorbind      +listcmds        +quickfix        +wildignore
++cursorshape     +localmap        +reltime         +wildmenu
++dialog_con      -lua             +rightleft       +windows
++diff            +menu            +ruby/dyn        +writebackup
++digraphs        +mksession       +scrollbind      -X11
+-dnd             +modify_fname    +signs           -xfontset
+-ebcdic          +mouse           +smartindent     -xim
++emacs_tags      -mouseshape      -sniff           -xsmp
++eval            +mouse_dec       +startuptime     -xterm_clipboard
++ex_extra        +mouse_gpm       +statusline      -xterm_save
++extra_search    -mouse_jsbterm   -sun_workshop    -xpm
+     系统 vimrc 文件: "/etc/vimrc"
+     用户 vimrc 文件: "$HOME/.vimrc"
+ 第二用户 vimrc 文件: "~/.vim/vimrc"
+      用户 exrc 文件: "$HOME/.exrc"
+         $VIM 预设值: "/etc"
+  $VIMRUNTIME 预设值: "/usr/share/vim/vim74"
+=======================================
+
+可见，不支持 -clipboard  剪切板，所以用不了。  装了gvim，使用 :reg 查看，gvim就支持。
+
+
+vim帮助 # vimtutor
