@@ -36,7 +36,8 @@ endfunction
 set noundofile
 set nobackup
 set noswapfile
-colo evening
+" colo evening
+colo desert
 set guifont=幼圆:h12
 set ts=4
 set expandtab
@@ -45,3 +46,5 @@ set cursorline
 set cursorcolumn
 set nowrap
 set nu
+set t_Co=256
+

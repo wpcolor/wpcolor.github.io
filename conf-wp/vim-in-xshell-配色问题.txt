@@ -1,0 +1,20 @@
+问题：  xshell连接后，使用vim 颜色只有黑白
+
+分析：
+        一般xshell连接服务器为8色，可以通过 #tput colors 来查看。
+
+
+解决：
+      *  让xterm支持256色方法:
+         /usr/share/terminfo/x/ 目录下，查看是否有 xterm-256color 文件
+         如果有： export TERM='xterm-256color'
+
+         可以写到 .bashrc 或 .bash_profile中
+
+      *  vim 支持256色方法：
+         在/etc/vimrc配置文件中添加：  set t_Co=256
+
+
+效果;
+       只能配出相似效果，因为只支持256色，所以xshell下不用evening 配色
+       改用： desert 

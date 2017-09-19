@@ -1,0 +1,411 @@
+# vim: filetype=markdown  
+vi / vim 基本操作  
+
+世界上只有三种编辑器，EMACS、VIM和其它
+普通文本编辑器没有模式，一直处于随时可编辑状态。vim却分了3种状态，对此，画家和画板的比喻，有助于理解其意义。画家创作作品的时候，画笔并不总是放在画布上的，画家构思反而占据了绝大多数时间。画家看着画布在思考的时候，画笔没必要放在画布上。甚至某些修改，是用刻刀或其他工具，而不是用画笔完成。vim同样。
+  
+vi/vim 共分为三种模式：分别是命令模式（Command mode），插入模式（Insert mode）和底线命令模式（Last line mode）  
+
+
+# 命令模式  
+用户刚刚启动 vi/vim，便进入了命令模式。此状态下敲击键盘动作会被Vim识别为命令，而非输入字符。比如我们此时按下i，并不会输入一个字符，i被当作了一个命令。  
+以下是常用的几个命令：  
+        i   在光标左侧插入正文  
+        a   在光标右侧插入正文  
+        o   在光标所在行的下一行增添新行  
+        O   在光标所在行的上一行增添新行  
+        I   在光标所在行的开头插入  
+        A   在光标所在行的末尾插入  
+        u   撤消前一条命令的结果；  
+        .   重复最后一条修改正文的命令。  
+若想要编辑文本：启动Vim，进入了命令模式，按下i，切换到输入模式。  
+命令模式只有一些最基本的命令，因此仍要依靠底线命令模式输入更多命令。  
+        : 切换到底线命令模式，以在最底一行输入命令。
+
+
+# 移动
+        h(左移)     j(上移)     k(下移)     l(右移)
+        gg 文档头  G 文档尾  ngg or gG  绝对跳转到某行, 10gg 10G 跳转到文档第10行
+        0 行首  $行尾  ^行头，非空字符
+        w 下一个单词  e当前单词尾部 b上一个单词首部 （w头e尾b上）
+        % 括号比配移动   { 上一段   } 下一段
+        H M L 屏幕顶部、中间、底部
+        zt 当前光标行放到屏幕顶端  zz放到中间   zb放到底部
+        mx 标记x    'x  跳转到标记x
+
+  
+# 缩进  
+        3>>   光标下3行右移  
+        3<<   光标下3行左移  
+        set expandtab   输入tab时自动将其转化为空格  
+  
+  
+# 保存退出 
+        w   保存；or w filename 另存为 (:w file 将编辑的内容写入 file 文件，保持原有文件的内容不变)  
+        q   在未作修改的情况下退出；  
+        q!  放弃所有修改，退出编辑程序。  
+        wq or ZZ  保存退出(zz不保存空文件)  
+
+## 部分保存 
+        :a,bw file            将第 a 行至第 b 行的内容写入 file 文件
+        :345                  将光标移到第 345 行  
+        :345w file            将第 345 行写入 file 文件  
+        :3,5w file            将第 3 行至第 5 行写入 file 文件  
+        :1,.w file            将第 1 行至当前行写入 file 文件  
+        :.,$w file            将当前行至最后一行写入 file 文件  
+        :.,.+5w file          从当前行开始将 6 行内容写入 file 文件  
+        :1,$w file            将所有内容写入 file 文件，相当于 :w file 命令  
+
+## 读取和编辑
+        :r file            读取 file 文件的内容，插入当前光标所在行的后面  
+        :e file            编辑新文件 file 代替原有内容  
+        :f file            将当前文件重命名为file(修改的内容保存在新文件，源文件不变  
+        :f                 打印当前文件名称和状态，如文件的行数、光标所在的行号等  
+
+
+# 删除和替换
+        dw       从光标处删除到下一个单词
+        d$       从光标处删除到当前行末尾
+        dd       删除整行, 10dd 从当前光标往下删除10行
+        r        替换当前光标的字符
+        R        进入替换模式
+        ce       替换当前光标到单词的末尾的内容，进入插入模式
+        c$       替换当前光标到行末的内容，进入插入模式
+        dG dgg   从光标处删除到文件尾和文件头
+        J        和下一行合并
+        c        修改（范围） cw 单词
+        C        修改到行尾 
+
+
+# 撤销
+        u         撤销
+        ctrl-r    恢复撤销的结果 
+
+
+# 复制粘贴
+        y    复制文本，后可跟w(单词) 0(到行首) $行尾等
+        yy   复制整行，3yy复制光标（含）下3行
+        p    粘贴
+
+
+# [查找和替换]
+        /要查找的字符串      找到后，按n查找下一个(文尾) N反向查找（开头）
+        s/old/new            在一行内替换第一个old字符串为new
+        s/old/new/g          在一行内替换所有old为new
+        #,#/s/old/new/g      从#到#行内的所有old替换为new
+        %s/old/new/g         替换文件内的全部old为new
+        %s/old/new/gc        进行全文替换的时候询问用户确认每个替换需添加c标志
+        : .,$ s/str1/str2/g  用 str2 替换当前行到文尾所有的str1  
+        : 1,$ s/str1/str2/g  用 str2 全文替换 str1   
+
+        g 放在命令末尾，表示对搜索字符串的每次出现进行替换,不止匹配每行中的第一次出现；不加g，表示只对搜索字符串的首次出现进行替换；  
+        s 表示后面跟着一串替换的命令；  
+        % 表示替换范围是所有行，即全文。  
+        gc 表示对每一处替换进行确认（反白显示的是当前需要确认项）  
+
+## 行内查找
+        f{char}/t{char}在行内查找下一指定字符
+        fx 行内查找字母'x',光标跳转到x上。 
+        ; 命令会重复查找上次f命令所查找的字符
+        星号\*查找光标处的单词。
+
+## 查找时的几个设置
+:set ic    # 'ignorecase'       查找时忽略字母的大小写
+:set hls   # 'hlsearch'         高亮显示所有的匹配短语
+ 
+在选项前加上'no’可以关闭选项 set noic ， set nohls
+
+  
+# [Shell切换]  
+        :!shell_command   执行完 shell_command 后回到Vim  
+        这称为Shell切换。它允许执行任何可以在标准的Shell提示符下执行的命令。当这条命令执行完毕，控制返回给编辑程序。又可以继续编辑对话过程。  
+        例如： !date /T  
+        提示：您还可以读取外部命令的输出。例如， :r !ls 可以读取 ls 命令的输出，并把它放置在光标下面。  :r !date /T
+
+
+# [分屏]  
+        :split（可用缩写 :sp） 上下分屏。后面跟已经存在的文件名则打开该文件。
+        :vsplit（可用缩写 :vsp）  左右分屏。 后面跟已经存在的文件名则打开该文件。 
+        :new = sp
+        :vnew = vsp  
+        Ctrl+w+h    切换到当前分屏的左边一屏；  
+        Ctrl+w+l    切换到当前分屏的右边一屏；  
+        Ctrl+w+j    切换到当前分屏的下方一屏  
+        Ctrl+w+w    来跳转分屏，不过跳转方向则是在当前Vim窗口所有分屏中，按照逆时针方向跳转  
+
+
+# [分屏窗口大小调整]
+        ctrl-w + 增加一行   - 减少一行  
+               > 宽增加     < 宽减少  
+  
+
+# [标签页]
+Vim的标签（Tab）页，类似浏览器的标签页，一个标签页打开一个Vim的窗口，一个Vim的窗口可以支持N个分屏。  
+在Vim中新建一个标签的命令是：  
+        :tabnew  
+
+如果要在新建标签页的同时打开一个文件，则可以在命令后面直接附带文件路径：  
+        :tabnew filename  
+
+Vim中的每个标签页有一个唯一的数字序号，第一个标签页的序号是0，从左向右依次加一。  
+  
+
+# [可视模式]  
+        v,V,<C-v>（在Windows下应该是<C-q>）  
+                J         把所有的行连接起来  
+                < 或 >    左右缩进  
+                =         自动给缩进   
+
+  
+# [vim帮助]  
+        在vim的安装目录下，有一个vimtutor.bat的中文帮助文件  
+  
+
+# [vim配置]  
+## 配色：
+        菜单->编辑->启动设定  或者直接编辑_vimrc文件   
+        写入 colo evening   evening是配色名，也就是vim_root/color/evening.vim文件。可以从网上下载配色文件，然后放到这个目录下即可。  
+  
+## 字体大小：
+        Linux/Unix命令格式：set guifont=字体 +\+空格 + 字体大小  
+        Windows/Mac命令格式：set guifont=字体 + : + 字体大小  
+相同的是，两个系统对空格都需要使用反斜杠`\`进行转意。  
+不同的是，关于字体大小的表述。Linux/Unix字体大小直接写字号，Windows/Mac字号需要加上h的高度名。  
+        实例：set guifont=幼圆:h10  
+  
+
+# 关于命令和对象   
+  许多改变文本的命令都由一个操作符和一个动作构成。  
+  使用删除操作符 d 的删除命令的格式如下：  
+
+        d   motion  
+  
+  其中：  
+        d      - 删除操作符。  
+        motion - 操作符的操作对象(在下面列出)。  
+            一个简短的动作列表：  
+            w - 从当前光标当前位置直到下一个单词起始处，不包括它的第一个字符。  
+            e - 从当前光标当前位置直到单词末尾，包括最后一个字符。  
+            $ - 从当前光标当前位置直到当前行末。  
+            因此输入 de 会从当前光标位置删除到单词末尾。  
+
+  
+# [关于Backspace按键]  
+In insert mode, to allow the backspace key to erase previously entered characters, autoindent, and newlines, set the following option:   
+        :set backspace=indent,eol,start   
+        Or   
+        :set backspace=2   
+  
+By default this option is empty, not allowing you to backspace over characters that weren't entered during the current insert mode session, the automatically inserted indentation, or across line breaks. This is the standard vi behavior.   
+  
+在插入模式，允许Backspace键删除先前输入的字符，自动缩进，和换行、设置以上选项：  
+默认情况下，此选项是空的，不允  
+许你进入插入模式删除不是当前会话期间的字符（你可以删除本次你键入的字符，用backspace按键。  
+  
+
+# 命令补全  
+        例如输入： :e  接着按 CTRL-D 键，Vim 会显示以 e 开始的命令的列表。  
+  
+
+# 文件格式和类型  
+        查看文件格式： *:set fileformat*  或者用 *set ff=unix* 设置  
+        查看文件类型： *:set filetype*      
+        设置文件类型： *:set filetype=markdown* 一个.txt文件的filetype设置为markdown，就和普通的markdown文件同样的显示效果(.md)  
+        另一种方式就是在文件内容中指定，Vim会从文件的头几行自动扫描文件是否有声明文件的类型的代码，如在文件的行首加入# vim：filetype=python(这里用中文冒号进行了替换，不然vim仍然会识别到这一行，会报错 :) )，Java文件变通的做法:/* vim：filetype=java */，总之就是把这行当作注释，以致于不影响文件的编译，这样Vim不通过文件名也能检测出文件是什么类型了。  
+  
+  
+# 折叠  
+vim 提供 6中折叠方式  
+         manual       手工定义折叠  
+         indent       更多的缩进表示更高级别的折叠  
+         expr         用表达式来定义折叠  
+         syntax       用语法高亮来定义折叠  
+         diff         对没有更改的文本进行折叠  
+         marker       对文中的标志折叠     
+  
+设置方法：可用选项 'foldmethod' 来设定折叠方式：set fdm=6选1  
+注意，每一种折叠方式不兼容，即：你不能用expr又用marker方式。  
+  
+禁用折叠：  
+        set nofoldenable  
+  
+以手工定义折叠为例：  
+        zf 创建折叠,比如在正常模式下，输入zf然后回车，就折叠当前行和下一行。输入zf的时候，vim右下角能看到输入提示。  
+        zE 除去删除 (Eliminate) 窗口里“所有”的折叠。 仅当 'foldmethod' 设为 "manual" 或 "marker" 时有效。  
+        zd 删除 (delete) 在光标下的折叠。仅当 'foldmethod' 设为 "manual" 或 "marker" 时有效。  
+        zo 打开光标下的折叠  
+        zc 关闭光标下的折叠  
+        zR 打开所有折叠  
+        zM 关闭所有折叠  
+        zf56G  从当前行折叠到56行，方向前后均可，例如可以 zf1G  
+        10zf   创建从当前行起到后10行的代码折叠。  
+        10zf-或zf10↑，创建从当前行起到之前10行的代码折叠。  
+        在括号处zf%，创建从当前行起到对应的匹配的括号上去（（），{}，[]，等）。  
+  
+
+# vim 行位加2个空格
+        因为Markdown的换行格式为2个回车或者行位2个空格，故在普通编辑完文本后，使用替换命令在行尾加2个空格，以符合Markdown语法。  
+        :%s/\n/  /r/\g
+
+
+# 特殊字符
+        -  查看vim所有可输入的特殊字符
+                :help digraph-table 
+        -  输入特殊字符：<ctrl-q>字符编码   linux是 ctrl-v
+        -  显示当前文件的二进制编码：
+                :%!xxd    恢复: %!xxd -r
+        -  转义字符： 一些特殊字符，在使用的时候需要转义，使用 \ ,比如： \[  \$ \% \# \]等 
+
+  
+# Tab键和空格互换
+对于已保存的文件，可以使用下面的方法进行空格和TAB的替换：  
+        TAB替换为空格：   
+        :set ts=4  
+        :set expandtab  
+        :%retab!  
+  
+        空格替换为TAB：  
+        :set ts=4  
+        :set noexpandtab  
+        :%retab!  
+
+加!是用于处理非空白字符之后的TAB，即所有的TAB，若不加!，则只处理行首的TAB。  
+
+
+# 比较
+  diffs filename
+
+
+# vim 中文帮助文档
+  下载地址：https://sourceforge.net/projects/vimcdoc/?source=typ_redirect
+  帮助语音设置：set helplang=cn | en  可以在中文帮助文档和英文帮助文档间切换
+
+
+# vim 插件安装
+  Vim 可以通过插件增强功能。插件其实是一个当 Vim 启动的时候能被自动执行的脚本。简单地把插件放到你 Vim 的 plugin 目录中就可以使它生效。
+  你可以加入一个全局插件使得某些功能在你每次使用 Vim 时都被开启。添加一个全局插件只要两步:
+  1. 获得一个插件的拷贝
+  2. 把它塞进合适的目录
+        系统            插件目录 ~
+        Unix		    ~/.vim/plugin/
+        Win             $HOME/vimfiles/plugin 或 $VIM/vimfiles/plugin
+  
+除了把这些插件直接放进 plugin/ 目录以外，还可以更好地组织一下，把它们放进 plugin 的单独的子目录中。例如，可以考虑把所有 Perl 插件放置在 "~/.vim/plugin/perl/\*.vim"
+
+# RHEL7 自带的vim安装path
+  配置文件： /etc/vimrc
+  安装路径： /usr/share/vim
+
+# [网络资料-参考vim配置]  
+"关闭兼容模式  
+set nocompatible  
+  
+"模仿windows快捷键 Ctrl+A全选、Ctrl+C复制、Ctrl+V粘贴  
+source $VIMRUNTIME/vimrc_example.vim  
+source $VIMRUNTIME/mswin.vim  
+behave mswin  
+  
+"gvim字体设置  
+set guifont=新宋体:h13:cGB2312  
+  
+"gvim内部编码  
+set encoding=utf-8  
+  
+"当前编辑的文件编码  
+set fileencoding=utf-8  
+  
+"gvim打开支持编码的文件  
+set fileencodings=ucs-bom,utf-8,gbk,cp936,gb2312,big5,euc-jp,euc-kr,latin1  
+"set langmenu=zh_CN  
+"let $LANG = 'zh_CN.UTF-8'  
+  
+"解决consle输出乱码  
+language messages zh_CN.utf-8  
+  
+"解决菜单乱码  
+source $VIMRUNTIME/delmenu.vim  
+source $VIMRUNTIME/menu.vim  
+  
+"设置终端编码为gvim内部编码encoding  
+let &termencoding=&encoding  
+  
+"防止特殊符号无法正常显示  
+set ambiwidth=double  
+  
+"缩进尺寸为4个空格  
+set sw=4  
+  
+"tab宽度为4个字符  
+set ts=4  
+  
+"编辑时将所有tab替换为空格  
+set et  
+  
+"按一次backspace就删除4个空格  
+set smarttab  
+  
+"不生成备份文件  
+set nobackup  
+  
+"开启行号标记  
+set number  
+  
+"配色方案  
+colo desert  
+  
+"关闭上侧工具栏  
+set guioptions-=T  
+  
+"关闭右侧滚动条  
+"set guioptions-=r  
+  
+"开启自动缩进  
+set autoindent  
+  
+
+
+VIM 配置
+" 高亮显示当前行/列
+set cursorline
+set cursorcolumn
+
+" 禁止折行
+set nowrap
+
+
+VIM大冒险：  https://vim-adventures.com/
+
+VIM手工安装插件方式：
+1. 官网下载
+2. 解压，cp到vim插件目录
+3. 运行 help tags
+
+Vim插件管理神器 Vundle
+https://github.com/VundleVim/Vundle.vim
+
+安装：
+    在VIM的配置文件中加一句 Bundle 'your/script/path'
+    在VIM中运行 :BundleInstall
+
+卸载：
+    去除配置文件中的 Bundle 'your/script/name'
+    在VIM中运行 :BundleClean
+
+更新：
+    运行 :BundleUpdate 
+
+插件列表：
+CtrlP 
+    - fast file finder    
+    - https://github.com/kien/ctrlp.vim
+
+YouCompleteMe 
+    - A code-completion engine for Vim    
+    - https://github.com/Valloric/YouCompleteMe
+
+
+查看光标出的字符编码:  ga
+
+在线配vim颜色的网站:  http://bytefluent.com/devify/
+update： 2017/09/19 周二 
+
