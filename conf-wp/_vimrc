@@ -1,4 +1,4 @@
-﻿set encoding=utf-8
+set encoding=utf-8
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
@@ -47,4 +47,4 @@ set cursorcolumn
 set nowrap
 set nu
 set t_Co=256
-
+set nobomb
