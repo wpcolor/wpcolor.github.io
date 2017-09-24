@@ -1,0 +1,39 @@
+vim技巧一书中建议将ESC与CAPSLOCK更换映射
+
+====================================
+图形界面下更换方法：
+
+xmodmap -e 'clear Lock' -e 'keycode 0x9 = Caps_Lock'
+
+xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+
+早期的键盘，esc时在现在tab位置，这也是vim将esc设置为退出插入模式的原因。但后来esc被设计到左上角，给vim操作带来很大的不便，是后来的事情了。
+
+
+查看键值：end
+xmodmap -pke |grep -i end
+
+查看键值： right 右方向键
+# xmodmap -pke |grep -i right
+====================================
+tty界面下更换方法：
+
+使用loadkeys改变tty终端下的键盘映射
+通过查询manpage可知，系统提供的键盘布局文件是放在/usr/share/keymaps目录下的。找到其中的 defkeymap.kmap.gz文件（在/usr/share/keymaps/i386/qwerty目录下），复制到用户的HOME目录中，解压 并打开它。我们要做的就是把Ctrl键映射到CapsLock键上。找到其中包含Caps_Lock的那一行：keycode 58 = Caps_Lock，那就是CapsLock键对应的扫描码了。将它改成：keycode 58 = Control即可
+
+
+
+有了修改过后的defkeymap.kmap文件。要在终端中使用这个键盘映射，我们只需要执行loadkeys defkeymap.kmap即可。
+
+
+==============================
+只在 .vimrc 中重新映射 Tab 键：
+nnoremap <Tab> <Esc>
+
+vnoremap <Tab> <Esc>
+gV
+onoremap <Tab> <Esc>
+
+inoremap <Tab> <Esc>
+
+这样的结果是，在 Vim 中 Tab 会彻底变成 Esc 键，对系统其他地方没有影响
